@@ -88,7 +88,7 @@ gn asset list -p id,symbol -o json
 | Flag | Short | Description |
 |------|-------|-------------|
 | `--filter` | | CEL filter expression |
-| `--prune` | `-p` | Comma-separated fields to keep; output is an array of objects with only those fields (e.g. `id`, `symbol`, `name`, `asset_type`, `categories`) |
+| `--prune` | `-p` | Comma-separated fields to keep (e.g. `id`, `symbol`, `name`); output is array of objects with only those fields |
 
 ### `gn asset describe <id>`
 
