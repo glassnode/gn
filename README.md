@@ -1,5 +1,7 @@
 # Glassnode CLI (`gn`)
 
+[![Test](https://github.com/glassnode/gn/actions/workflows/test.yml/badge.svg)](https://github.com/glassnode/gn/actions/workflows/test.yml) [![Release](https://github.com/glassnode/gn/actions/workflows/release.yml/badge.svg)](https://github.com/glassnode/gn/actions/workflows/release.yml)
+
 Command-line interface for the [Glassnode API](https://docs.glassnode.com/)
 
 ## Installation
@@ -236,4 +238,4 @@ go test ./...
 
 ## License
 
-Apache-2.0
+[Apache-2.0](LICENSE)
