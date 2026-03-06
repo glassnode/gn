@@ -18,7 +18,7 @@ metadata:
 
 # Glassnode CLI (`gn`)
 
-Command-line interface for the Glassnode API — on-chain and crypto market data.
+Command-line interface for the Glassnode API.
 
 ## Setup
 
@@ -32,13 +32,19 @@ curl -sSL https://raw.githubusercontent.com/glassnode/gn/main/install.sh | bash
 irm https://raw.githubusercontent.com/glassnode/gn/main/install.ps1 | iex
 ```
 
-Or download manually from [GitHub Releases](https://github.com/glassnode/gn/releases).
+Or download manually from [GitHub Releases](https://github.com/glassnode/gn/releases). Custom install dir: `INSTALL_DIR=~/bin curl -sSL ... | bash`.
 
-Set your API key:
+Set your API key (priority: `--api-key` flag > `GLASSNODE_API_KEY` env > `~/.gn/config.yaml`):
 ```bash
 export GLASSNODE_API_KEY=your-key
 # or persist it:
 gn config set api-key=your-key
+```
+
+Quick start:
+```bash
+gn asset list
+gn metric get market/price_usd_close --asset BTC --since 30d
 ```
 
 ## Commands
@@ -83,7 +89,7 @@ gn metric get distribution/balance_exchanges --asset BTC --exchange binance --cu
 Append `/bulk` to the metric path. Repeat `-a` (or `--asset`) for each asset, or use `-a '*'` for all:
 ```bash
 gn metric get market/marketcap_usd/bulk -a BTC -a ETH -a SOL -s 1d
-gn metric get market/marketcap_usd/bulk -a '*' -s 1d
+gn metric get market/marketcap_usd/bulk -a '*' --interval 24h --since 30d
 ```
 
 ### Config set / get
@@ -107,7 +113,7 @@ gn config get all
 
 - Always call `gn metric describe <path>` before `gn metric get` to discover valid parameters, assets, exchanges, and intervals for a metric.
 - Use `--output json` (default) for structured output suitable for piping to `jq`.
-- Use `--dry-run` to preview the API request URL without executing.
+- Use `--dry-run` to preview the API request URL without executing: `gn metric get market/price_usd_close --asset BTC --since 30d --dry-run`.
 - For bulk metrics (path ending in `/bulk`), use `-a` with specific assets or `-a '*'` for all.
 - Relative time values are supported for `--since` and `--until`: e.g. `30d`, `7d`, `1h`.
 
