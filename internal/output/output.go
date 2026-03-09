@@ -8,10 +8,16 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/glassnode/gn/internal/api"
 	"github.com/olekukonko/tablewriter"
 )
+
+// formatTimestamp formats a Unix timestamp (seconds) for human-readable table output.
+func formatTimestamp(t int64) string {
+	return time.Unix(t, 0).UTC().Format("2006-01-02 15:04:05")
+}
 
 // Print writes data to os.Stdout in the given format. For tests, use PrintTo with a buffer.
 func Print(format string, data interface{}) error {
@@ -182,19 +188,19 @@ func PrintTable(w io.Writer, data interface{}) error {
 		}
 		if v[0].O != nil {
 			keys := sortedKeys(v[0].O)
-			header := append([]string{"T"}, upperAll(keys)...)
+			header := append([]string{"TIME"}, upperAll(keys)...)
 			table.SetHeader(header)
 			for _, dp := range v {
-				row := []string{fmt.Sprintf("%d", dp.T)}
+				row := []string{formatTimestamp(dp.T)}
 				for _, k := range keys {
 					row = append(row, fmt.Sprintf("%v", dp.O[k]))
 				}
 				table.Append(row)
 			}
 		} else {
-			table.SetHeader([]string{"T", "V"})
+			table.SetHeader([]string{"TIME", "VALUE"})
 			for _, dp := range v {
-				table.Append([]string{fmt.Sprintf("%d", dp.T), fmt.Sprintf("%v", dp.V)})
+				table.Append([]string{formatTimestamp(dp.T), fmt.Sprintf("%v", dp.V)})
 			}
 		}
 	case *api.BulkResponse:
@@ -205,11 +211,11 @@ func PrintTable(w io.Writer, data interface{}) error {
 		if len(v.Data[0].Bulk) > 0 {
 			keys = sortedKeys(v.Data[0].Bulk[0])
 		}
-		header := append([]string{"T"}, upperAll(keys)...)
+		header := append([]string{"TIME"}, upperAll(keys)...)
 		table.SetHeader(header)
 		for _, dp := range v.Data {
 			for _, entry := range dp.Bulk {
-				row := []string{fmt.Sprintf("%d", dp.T)}
+				row := []string{formatTimestamp(dp.T)}
 				for _, k := range keys {
 					row = append(row, fmt.Sprintf("%v", entry[k]))
 				}
