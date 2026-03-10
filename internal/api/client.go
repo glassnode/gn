@@ -85,6 +85,7 @@ func (c *Client) DoWithRepeatedParams(ctx context.Context, method, path string, 
 	if err != nil {
 		return nil, fmt.Errorf("creating request: %w", err)
 	}
+	req.Header.Set("User-Agent", "cli")
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
