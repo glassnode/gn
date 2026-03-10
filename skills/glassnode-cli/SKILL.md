@@ -1,21 +1,3 @@
----
-name: glassnode-cli
-version: 1.0.0
-description: Fetch on-chain crypto metrics and market data via the Glassnode CLI
-tags:
-  - crypto
-  - on-chain
-  - market-data
-  - blockchain
-  - api
-category: data
-metadata:
-  openclaw:
-    requires:
-      bins: ["gn"]
-      env: ["GLASSNODE_API_KEY"]
----
-
 # Glassnode CLI (`gn`)
 
 Command-line interface for the Glassnode API.
