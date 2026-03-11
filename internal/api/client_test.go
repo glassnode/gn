@@ -83,8 +83,8 @@ func TestDo_SendsCorrectURL(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("my-api-key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.Do(context.Background(), "GET", "/v1/test", map[string]string{"a": "b"})
 	if err != nil {
@@ -106,8 +106,8 @@ func TestDo_Non2xxReturnsError(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.Do(context.Background(), "GET", "/v1/test", nil)
 	if err == nil {
@@ -125,8 +125,8 @@ func TestDoWithRepeatedParams(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	repeated := map[string][]string{"a": {"x", "y"}}
 	_, err := client.DoWithRepeatedParams(context.Background(), "GET", "/v1/test", nil, repeated)
@@ -140,7 +140,7 @@ func TestDoWithRepeatedParams(t *testing.T) {
 
 func TestBuildURL(t *testing.T) {
 	client := NewClient("test-key")
-	client.BaseURL = "https://api.example.com"
+	client.baseURL = "https://api.example.com"
 	got, err := client.BuildURL("/v1/path", map[string]string{"p": "v"}, map[string][]string{"a": {"x"}})
 	if err != nil {
 		t.Fatalf("BuildURL: %v", err)
@@ -182,8 +182,8 @@ func TestListAssets(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	assets, err := client.ListAssets(context.Background(), "")
 	if err != nil {
@@ -207,8 +207,8 @@ func TestListAssets_WithFilter(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	filter := "asset.semantic_tags.exists(tag,tag=='stablecoin')"
 	_, err := client.ListAssets(context.Background(), filter)
@@ -231,8 +231,8 @@ func TestListMetrics(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	metrics, err := client.ListMetrics(context.Background(), nil, nil)
 	if err != nil {
@@ -259,8 +259,8 @@ func TestListMetrics_WithAsset(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.ListMetrics(context.Background(), map[string]string{"a": "BTC"}, nil)
 	if err != nil {
@@ -279,8 +279,8 @@ func TestDescribeMetric(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	meta, err := client.DescribeMetric(context.Background(), "/market/price_usd_close", "")
 	if err != nil {
@@ -304,8 +304,8 @@ func TestDescribeMetric_WithAsset(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.DescribeMetric(context.Background(), "/market/price_usd_close", "BTC")
 	if err != nil {
@@ -338,8 +338,8 @@ func TestGetMetric(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	points, err := client.GetMetric(context.Background(), "/market/price_usd_close", nil)
 	if err != nil {
@@ -364,8 +364,8 @@ func TestGetMetricBulk(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	resp, err := client.GetMetricBulk(context.Background(), "/market/price_usd_close", nil, nil)
 	if err != nil {
@@ -398,8 +398,8 @@ func TestListAssets_InvalidJSONReturnsError(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.ListAssets(context.Background(), "")
 	if err == nil {
@@ -415,8 +415,8 @@ func TestListMetrics_InvalidJSONReturnsError(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.ListMetrics(context.Background(), nil, nil)
 	if err == nil {
@@ -432,8 +432,8 @@ func TestGetMetric_InvalidJSONReturnsError(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.GetMetric(context.Background(), "/market/price", nil)
 	if err == nil {
@@ -449,8 +449,8 @@ func TestGetMetricBulk_InvalidJSONReturnsError(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.GetMetricBulk(context.Background(), "/market/price", nil, nil)
 	if err == nil {
@@ -468,8 +468,8 @@ func TestListAssets_EmptyArray(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	assets, err := client.ListAssets(context.Background(), "")
 	if err != nil {
@@ -488,8 +488,8 @@ func TestListMetrics_EmptyArray(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	metrics, err := client.ListMetrics(context.Background(), nil, nil)
 	if err != nil {
@@ -508,8 +508,8 @@ func TestGetMetric_EmptyArray(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	points, err := client.GetMetric(context.Background(), "/market/price", nil)
 	if err != nil {
@@ -528,8 +528,8 @@ func TestGetMetricBulk_EmptyData(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	resp, err := client.GetMetricBulk(context.Background(), "/market/price", nil, nil)
 	if err != nil {
@@ -550,8 +550,8 @@ func TestDo_4xxReturnsErrorWithBody(t *testing.T) {
 	defer server.Close()
 
 	client := NewClient("key")
-	client.BaseURL = server.URL
-	client.HTTPClient = server.Client()
+	client.baseURL = server.URL
+	client.httpClient = server.Client()
 
 	_, err := client.Do(context.Background(), "GET", "/v1/test", nil)
 	if err == nil {

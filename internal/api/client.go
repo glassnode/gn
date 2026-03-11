@@ -13,23 +13,29 @@ import (
 	"github.com/glassnode/glassnode-cli/internal/config"
 )
 
-const defaultHTTPTimeout = 1 * time.Minute
+const (
+	defaultHTTPTimeout = 1 * time.Minute
+)
+
+var (
+	baseURL = "https://api.glassnode.com"
+)
 
 type Client struct {
-	BaseURL    string
-	APIKey     string
-	HTTPClient *http.Client
+	baseURL    string
+	apiKey     string
+	httpClient *http.Client
 }
 
 func NewClient(apiKey string) *Client {
-	baseURL := "https://api.glassnode.com"
 	if u := os.Getenv("GLASSNODE_BASE_URL"); u != "" {
 		baseURL = u
 	}
+
 	return &Client{
-		BaseURL: baseURL,
-		APIKey:  apiKey,
-		HTTPClient: &http.Client{
+		baseURL: baseURL,
+		apiKey:  apiKey,
+		httpClient: &http.Client{
 			Timeout: defaultHTTPTimeout,
 		},
 	}
@@ -41,12 +47,15 @@ func ResolveAPIKey(flagValue string) string {
 	if flagValue != "" {
 		return flagValue
 	}
+
 	if env := os.Getenv("GLASSNODE_API_KEY"); env != "" {
 		return env
 	}
+
 	if val, err := config.Get("api-key"); err == nil && val != "" {
 		return val
 	}
+
 	return ""
 }
 
@@ -64,13 +73,13 @@ func (c *Client) Do(ctx context.Context, method, path string, params map[string]
 }
 
 func (c *Client) DoWithRepeatedParams(ctx context.Context, method, path string, params map[string]string, repeatedParams map[string][]string) ([]byte, error) {
-	u, err := url.Parse(c.BaseURL + path)
+	u, err := url.Parse(c.baseURL + path)
 	if err != nil {
 		return nil, fmt.Errorf("parsing URL: %w", err)
 	}
 
 	q := u.Query()
-	q.Set("api_key", c.APIKey)
+	q.Set("api_key", c.apiKey)
 	for k, v := range params {
 		q.Set(k, v)
 	}
@@ -87,7 +96,7 @@ func (c *Client) DoWithRepeatedParams(ctx context.Context, method, path string, 
 	}
 	req.Header.Set("User-Agent", "cli")
 
-	resp, err := c.HTTPClient.Do(req)
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("executing request: %w", err)
 	}

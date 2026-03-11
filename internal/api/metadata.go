@@ -168,12 +168,12 @@ func (c *Client) DescribeMetric(ctx context.Context, path, asset string) (*Metri
 
 // BuildURL constructs the full request URL without executing the request.
 func (c *Client) BuildURL(path string, params map[string]string, repeatedParams map[string][]string) (string, error) {
-	u, err := url.Parse(c.BaseURL + path)
+	u, err := url.Parse(c.baseURL + path)
 	if err != nil {
 		return "", fmt.Errorf("parsing URL: %w", err)
 	}
 	q := u.Query()
-	q.Set("api_key", c.APIKey)
+	q.Set("api_key", c.apiKey)
 	for k, v := range params {
 		q.Set(k, v)
 	}

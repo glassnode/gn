@@ -127,7 +127,7 @@ func TestLoad_UnreadableFile(t *testing.T) {
 		if err := os.Chmod(path, 0o000); err != nil {
 			t.Fatalf("chmod: %v", err)
 		}
-		t.Cleanup(func() { os.Chmod(path, 0o644) })
+		t.Cleanup(func() { _ = os.Chmod(path, 0o644) })
 		_, err := Load()
 		if err == nil {
 			t.Error("expected error when config file is not readable")
